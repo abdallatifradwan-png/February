@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تحليل دوام مدارس محافظة قلقيلية - شباط 2026</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts: Cairo -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- html2pdf.js for downloading PDF -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Cairo', 'sans-serif'],
+                    },
+                    colors: {
+                        primary: '#881337', 
+                        primaryLight: '#be123c',
+                        secondary: '#fdf2f8',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Cairo', sans-serif; background-color: #f3f4f6; }
+        .card-shadow { box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03); }
+        @media print {
+            .no-print { display: none !important; }
+        }
+    </style>
+</head>
+<body class="text-gray-800 antialiased pb-10">
+
+    <div id="dashboard-content" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        
+        <!-- Header Section -->
+        <header class="bg-primary text-white rounded-2xl p-6 md:p-8 flex flex-col md:flex-row items-center justify-between shadow-lg mb-8 relative overflow-hidden">
+            <div class="absolute opacity-10 -left-10 -top-10 text-[150px]">
+                <i class="fa-solid fa-school"></i>
+            </div>
+            <div class="flex flex-col md:flex-row items-center gap-6 z-10 w-full justify-between">
+                <div class="flex items-center gap-6">
+                    <div class="bg-white/20 p-4 rounded-xl hidden md:block">
+                        <i class="fa-solid fa-school text-4xl"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-2xl md:text-4xl font-bold mb-2">تحليل دوام مدارس محافظة قلقيلية</h1>
+                        <div class="flex items-center gap-2 text-primaryLight bg-white px-4 py-1.5 rounded-full inline-flex font-semibold text-sm md:text-base">
+                            <i class="fa-regular fa-calendar-days"></i>
+                            <span>شهر شباط - 2026</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Download Button -->
+                <button onclick="downloadPDF()" class="no-print mt-4 md:mt-0 bg-white text-primary hover:bg-secondary transition-colors px-6 py-3 rounded-xl font-bold flex items-center gap-2 shadow-lg">
+                    <i class="fa-solid fa-file-pdf text-xl"></i>
+                    <span>تنزيل التقرير (PDF)</span>
+                </button>
+            </div>
+        </header>
+
+        <!-- Section 1: Numerical Summary -->
+        <div class="mb-4 flex items-center gap-2">
+            <i class="fa-solid fa-chart-simple text-primary text-xl"></i>
+            <h2 class="text-xl font-bold text-gray-700">الملخص الرقمي</h2>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+            <!-- Card 1 -->
+            <div class="bg-white rounded-2xl p-6 card-shadow border-t-4 border-primary flex justify-between items-center transition-transform hover:-translate-y-1 duration-300">
+                <div>
+                    <p class="text-gray-500 font-semibold mb-1">أيام الدوام الفعلي</p>
+                    <div class="flex items-baseline gap-2">
+                        <span class="text-4xl font-bold text-primary">60%</span>
+                        <span class="text-gray-400 text-sm">(12 يوم)</span>
+                    </div>
+                </div>
+                <div class="bg-secondary p-4 rounded-xl text-primary">
+                    <i class="fa-solid fa-user-check text-2xl"></i>
+                </div>
+            </div>
+
+            <!-- Card 2 -->
+            <div class="bg-white rounded-2xl p-6 card-shadow border-t-4 border-gray-400 flex justify-between items-center transition-transform hover:-translate-y-1 duration-300">
+                <div>
+                    <p class="text-gray-500 font-semibold mb-1">أيام المهمات</p>
+                    <div class="flex items-baseline gap-2">
+                        <span class="text-4xl font-bold text-gray-600">40%</span>
+                        <span class="text-gray-400 text-sm">(8 أيام)</span>
+                    </div>
+                </div>
+                <div class="bg-gray-100 p-4 rounded-xl text-gray-600">
+                    <i class="fa-solid fa-list-check text-2xl"></i>
+                </div>
+            </div>
+
+            <!-- Card 3 -->
+            <div class="bg-white rounded-2xl p-6 card-shadow border-t-4 border-primary flex justify-between items-center transition-transform hover:-translate-y-1 duration-300">
+                <div>
+                    <p class="text-gray-500 font-semibold mb-1">إجمالي المدارس</p>
+                    <div class="flex items-baseline gap-2">
+                        <span class="text-4xl font-bold text-primary">82</span>
+                        <span class="text-gray-400 text-sm">مدرسة</span>
+                    </div>
+                </div>
+                <div class="bg-secondary p-4 rounded-xl text-primary">
+                    <i class="fa-solid fa-building text-2xl"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 2: Charts -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-10">
+            <!-- Donut Chart -->
+            <div class="bg-white p-6 rounded-2xl card-shadow">
+                <div class="flex items-center justify-center gap-2 mb-6">
+                    <i class="fa-regular fa-calendar text-blue-500"></i>
+                    <h3 class="text-lg font-bold text-gray-700 text-center">توزيع أيام الشهر</h3>
+                </div>
+                <div class="relative h-64 w-full flex justify-center">
+                    <canvas id="distributionChart"></canvas>
+                </div>
+                <div class="flex justify-center gap-6 mt-4">
+                    <div class="flex items-center gap-2">
+                        <span class="w-4 h-4 rounded-sm bg-primary"></span>
+                        <span class="text-sm font-semibold text-gray-600">دوام فعلي (60%)</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <span class="w-4 h-4 rounded-sm" style="background-color: #fbcfe8;"></span>
+                        <span class="text-sm font-semibold text-gray-600">مهمات (40%)</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bar Chart -->
+            <div class="bg-white p-6 rounded-2xl card-shadow">
+                <div class="flex items-center justify-center gap-2 mb-6">
+                    <i class="fa-solid fa-graduation-cap text-gray-600"></i>
+                    <h3 class="text-lg font-bold text-gray-700 text-center">المدارس المداومة جزئياً (خلال المهمات)</h3>
+                </div>
+                <div class="relative h-72 w-full">
+                    <canvas id="partialSchoolsChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 3: Analysis Texts -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-10">
+            
+            <!-- General Status -->
+            <div class="bg-white p-8 rounded-2xl card-shadow">
+                <div class="flex items-center gap-3 mb-6 border-b pb-4">
+                    <i class="fa-solid fa-graduation-cap text-2xl text-primary"></i>
+                    <h3 class="text-xl font-bold text-primary">وضع الثانوية العامة</h3>
+                </div>
+                <div class="space-y-6">
+                    <div class="flex gap-4">
+                        <div class="mt-1"><i class="fa-solid fa-circle-check text-green-600"></i></div>
+                        <div>
+                            <h4 class="font-bold text-gray-800 mb-1">مرونة إدارية:</h4>
+                            <p class="text-gray-600 leading-relaxed text-sm">استمرت العديد من المدارس في إعطاء حصص لطلبة التوجيهي (دوام جزئي) خلال أيام المهمات.</p>
+                        </div>
+                    </div>
+                    <div class="flex gap-4">
+                        <div class="mt-1"><i class="fa-solid fa-arrow-trend-down text-red-500"></i></div>
+                        <div>
+                            <h4 class="font-bold text-gray-800 mb-1">تراجع التدخل:</h4>
+                            <p class="text-gray-600 leading-relaxed text-sm">لوحظ انخفاض في عدد المدارس التي تعوض التوجيهي في النصف الثاني من الشهر (من متوسط 26 مدرسة الأسبوع الأول إلى 10 مدارس في الأسبوع الأخير).</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Administrative Reading -->
+            <div class="bg-white p-8 rounded-2xl card-shadow">
+                <div class="flex items-center gap-3 mb-6 border-b pb-4">
+                    <i class="fa-solid fa-magnifying-glass-chart text-2xl text-primary"></i>
+                    <h3 class="text-xl font-bold text-primary">قراءة تحليلية إدارية</h3>
+                </div>
+                <div class="space-y-6">
+                    <div class="flex gap-4">
+                        <div class="mt-1"><i class="fa-solid fa-circle-exclamation text-orange-500"></i></div>
+                        <div>
+                            <h4 class="font-bold text-gray-800 mb-1">الفروق الأسبوعية:</h4>
+                            <p class="text-gray-600 leading-relaxed text-sm">الأسبوع الأول كان أكثر توازناً بتوزيع المهمات (ثلاثاء/خميس)، بينما بقية الأسابيع (أربعاء/خميس) تسببت بانقطاع الطلبة لـ 4 أيام متتالية أسبوعياً.</p>
+                        </div>
+                    </div>
+                    <div class="flex gap-4">
+                        <div class="mt-1"><i class="fa-solid fa-scale-unbalanced text-primary"></i></div>
+                        <div>
+                            <h4 class="font-bold text-gray-800 mb-1">مستوى الاستقرار:</h4>
+                            <p class="text-gray-600 leading-relaxed text-sm">يشهد الشهر "استقراراً متذبذباً" يؤثر على التسلسل المعرفي والروتين المدرسي رغم نسبة الدوام (60%).</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 4: Recommendations -->
+        <div class="bg-white p-8 rounded-2xl card-shadow border-r-4 border-primary mb-10">
+             <div class="flex items-center gap-3 mb-6">
+                <i class="fa-solid fa-thumbtack text-2xl text-primary"></i>
+                <h3 class="text-xl font-bold text-primary">توصيات تنظيمية</h3>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="flex items-center gap-4 bg-gray-50 p-4 rounded-xl border border-gray-100">
+                    <div class="bg-secondary p-3 rounded-full text-primary">
+                        <i class="fa-solid fa-bullseye"></i>
+                    </div>
+                    <p class="text-gray-700 font-semibold text-sm">توجيه الإشراف التربوي لدعم المدارس المتراجعة في تعويض التوجيهي.</p>
+                </div>
+                <div class="flex items-center gap-4 bg-gray-50 p-4 rounded-xl border border-gray-100">
+                    <div class="bg-secondary p-3 rounded-full text-primary">
+                        <i class="fa-solid fa-laptop-house"></i>
+                    </div>
+                    <p class="text-gray-700 font-semibold text-sm">تفعيل المنصات الإلكترونية لتعويض فترات الانقطاع الطويلة نهاية الأسبوع.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="bg-primary text-white p-4 rounded-xl flex flex-col md:flex-row justify-between items-center text-sm gap-4 shadow-md">
+            <div class="flex items-center gap-2">
+                <i class="fa-solid fa-pen-nib"></i>
+                <span>الإعداد: <strong>قسم المتابعة الميدانية - أ. عبد اللطيف رضوان</strong></span>
+            </div>
+            <div class="flex items-center gap-2 bg-white/10 px-4 py-1.5 rounded-full">
+                <i class="fa-regular fa-clock"></i>
+                <span>التاريخ: 25/02/2026</span>
+            </div>
+            <div class="flex items-center gap-2">
+                <i class="fa-solid fa-building-columns"></i>
+                <span>مديرية التربية والتعليم - قلقيلية</span>
+            </div>
+        </footer>
+
+    </div>
+
+    <!-- Chart Initialization Scripts -->
+    <script>
+        // Set global font for Chart.js
+        Chart.defaults.font.family = "'Cairo', sans-serif";
+        Chart.defaults.color = '#4b5563';
+
+        // 1. Doughnut Chart
+        const ctxDoughnut = document.getElementById('distributionChart').getContext('2d');
+        new Chart(ctxDoughnut, {
+            type: 'doughnut',
+            data: {
+                labels: ['دوام فعلي', 'مهمات'],
+                datasets: [{
+                    data: [60, 40],
+                    backgroundColor: ['#881337', '#fbcfe8'],
+                    borderWidth: 0,
+                    hoverOffset: 4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                cutout: '75%',
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        titleFont: { family: 'Cairo', size: 14 },
+                        bodyFont: { family: 'Cairo', size: 14 },
+                        callbacks: {
+                            label: function(context) { return ' ' + context.label + ': ' + context.raw + '%'; }
+                        }
+                    }
+                }
+            }
+        });
+
+        // 2. Bar Chart
+        const ctxBar = document.getElementById('partialSchoolsChart').getContext('2d');
+        const barLabels = ['3 شباط', '5 شباط', '10 شباط', '12 شباط', '18 شباط', '19 شباط', '25 شباط', '26 شباط'];
+        const barData = [30, 23, 33, 21, 12, 4, 16, 6];
+
+        new Chart(ctxBar, {
+            type: 'bar',
+            data: {
+                labels: barLabels,
+                datasets: [{
+                    label: 'عدد المدارس',
+                    data: barData,
+                    backgroundColor: '#881337',
+                    borderRadius: 4,
+                    barThickness: 24
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 40,
+                        ticks: { stepSize: 10, font: { family: 'Cairo' } },
+                        grid: { color: '#e5e7eb', drawBorder: false }
+                    },
+                    x: {
+                        ticks: { font: { family: 'Cairo', size: 11 }, maxRotation: 45, minRotation: 45 },
+                        grid: { display: false, drawBorder: false }
+                    }
+                }
+            }
+        });
+
+        // Function to download the dashboard as PDF
+        async function downloadPDF() {
+            const element = document.getElementById('dashboard-content');
+            const options = {
+                margin: 0.5,
+                filename: 'تقرير_دوام_مدارس_قلقيلية_2026.pdf',
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2, useCORS: true },
+                jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
+            };
+
+            // Temporary change button text to show progress
+            const btn = event.currentTarget;
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> جاري التنزيل...';
+            btn.disabled = true;
+
+            try {
+                await html2pdf().set(options).from(element).save();
+            } catch (error) {
+                console.error('PDF generation failed:', error);
+            } finally {
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+            }
+        }
+    </script>
+</body>
+</html>
