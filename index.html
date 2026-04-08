@@ -79,7 +79,7 @@
         .card-body {
             padding: 2.5rem;
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
             gap: 20px;
         }
 
@@ -95,14 +95,20 @@
         }
         .subject-item:hover { transform: scale(1.03); border-color: var(--accent-color); }
 
-        .subject-name { font-weight: 600; color: #475569; font-size: 1rem; }
+        .subject-info { display: flex; flex-direction: column; gap: 6px; }
+        .subject-name { font-weight: 700; color: #334155; font-size: 1.1rem; }
+        
+        .pages-info { font-size: 0.85rem; font-weight: 600; display: inline-block; width: fit-content;}
+        .pages-done-badge { color: #059669; background: #ecfdf5; padding: 3px 8px; border-radius: 6px; border: 1px solid #a7f3d0;}
+        .pages-remaining { color: #dc2626; background: #fef2f2; padding: 3px 8px; border-radius: 6px; border: 1px solid #fecaca;}
+
         .achievement-rate {
             font-weight: 800;
             color: var(--primary-color);
-            font-size: 1.2rem;
+            font-size: 1.3rem;
             background: #f1f5f9;
-            padding: 4px 10px;
-            border-radius: 8px;
+            padding: 6px 12px;
+            border-radius: 10px;
         }
 
         .rate-100 { color: #059669; background: #ecfdf5; }
@@ -133,7 +139,7 @@
         <p>وزارة التربية والتعليم العالي - مديرية قلقيلية</p>
     </div>
     <div class="meta-info">
-        <span>📅 العام الدراسي: 2026/ 2025</span>
+        <span>📅 العام الدراسي: 2023/2024</span>
         <span>📍 الفرع الدراسي: متاح للاختيار</span>
     </div>
 </header>
@@ -149,6 +155,7 @@
                 <option value="industrial">الفرع الصناعي</option>
                 <option value="agricultural">الفرع الزراعي</option>
                 <option value="business">فرع الريادة والأعمال</option>
+                <option value="home_economics">فرع الاقتصاد المنزلي</option>
             </select>
         </div>
 
@@ -177,6 +184,17 @@
 </footer>
 
 <script>
+// إجمالي عدد الصفحات لكل مبحث بناءً على ملفات الإكسل المرفقة
+// تم استخراجها لحساب الصفحات المتبقية تلقائياً بناءً على النسبة
+const pageTotals = {
+    scientific: {"الرياضيات": 195, "اللغة العربية": 100, "اللغة الانجليزية": 90, "التكنولوجيا": 102, "التربية الإسلامية": 118, "الكيمياء": 150, "الفيزياء": 143, "العلوم الحياتية": 153},
+    literary: {"الرياضيات": 115, "التاريخ": 100, "الجغرافيا": 123, "الثقافة العلمية": 85, "اللغة العربية": 197, "اللغة الانجليزية": 130, "التكنولوجيا": 90, "التربية الإسلامية": 118},
+    industrial: {"التربية الإسلامية": 118, "اللغة العربية": 105, "اللغة الانجليزية": 90, "الرياضيات": 120, "الرسم الصناعي": 100, "علم الصناعة": 240, "الفيزياء": 143, "التكنولوجيا": 102},
+    agricultural: {"اللغة العربية": 120, "اللغة الانجليزية": 100, "التكنولوجيا": 90, "التربية الإسلامية": 118, "الرياضيات": 120, "العلوم الزراعية": 360, "الكيمياء": 145, "العلوم الحياتية": 135},
+    business: {"الادارة والاقتصاد": 146, "التربية الإسلامية": 115, "التكنولوجيا": 90, "الرياضيات": 130, "اللغة الانجليزية": 90, "اللغة العربية": 100, "المحاسبة": 154, "المشاريع الصغيرة": 122},
+    home_economics: {"اللغة العربية": 100, "اللغة الانجليزية": 90, "التكنولوجيا": 102, "التربية الإسلامية": 118, "الرياضيات": 120, "العلوم المهنية": 160, "الكيمياء": 120, "الرسم المهني": 130}
+};
+
 const data = {
     scientific: [
         { name: "اماتين الثانوية المختلطة", subjects: {"الرياضيات": "100%", "اللغة العربية": "100%", "اللغة الانجليزية": "97%", "التكنولوجيا": "100%", "التربية الإسلامية": "100%", "الكيمياء": "97%", "الفيزياء": "94%", "العلوم الحياتية": "99%"} },
@@ -256,6 +274,11 @@ const data = {
         { name: "حجة الثانوية المختلطة", subjects: {"الادارة والاقتصاد": "100%", "التربية الإسلامية": "97%", "التكنولوجيا": "91%", "الرياضيات": "100%", "اللغة الانجليزية": "91%", "اللغة العربية": "95%", "المحاسبة": "100%", "المشاريع الصغيرة": "90%"} },
         { name: "ذكور السلام الثانوية", subjects: {"الادارة والاقتصاد": "100%", "التربية الإسلامية": "100%", "التكنولوجيا": "100%", "الرياضيات": "96%", "اللغة الانجليزية": "92%", "اللغة العربية": "100%", "المحاسبة": "97%", "المشاريع الصغيرة": "100%"} },
         { name: "ذكور عزون الثانوية", subjects: {"الادارة والاقتصاد": "100%", "التربية الإسلامية": "100%", "التكنولوجيا": "100%", "الرياضيات": "100%", "اللغة الانجليزية": "100%", "اللغة العربية": "95%", "المحاسبة": "100%", "المشاريع الصغيرة": "100%"} }
+    ],
+    // تمت إضافة فرع الاقتصاد المنزلي من المرفقات
+    home_economics: [
+        { name: "بنات العمرية الثانوية", subjects: {"اللغة العربية": "100%", "اللغة الانجليزية": "93%", "التكنولوجيا": "100%", "التربية الإسلامية": "100%", "الرياضيات": "95%", "العلوم المهنية": "100%", "الكيمياء": "100%", "الرسم المهني": "100%"} },
+        { name: "بنات حبلة الثانوية", subjects: {"اللغة العربية": "100%", "اللغة الانجليزية": "100%", "التكنولوجيا": "100%", "التربية الإسلامية": "100%", "الرياضيات": "100%", "العلوم المهنية": "100%", "الكيمياء": "100%", "الرسم المهني": "100%"} }
     ]
 };
 
@@ -269,12 +292,11 @@ function updateSchools() {
 
     if (branch && data[branch]) {
         schoolSelect.disabled = false;
-        // ترتيب المدارس أبجدياً ليسهل البحث
         const sortedSchools = [...data[branch]].sort((a, b) => a.name.localeCompare(b.name, 'ar'));
         
         sortedSchools.forEach((school, index) => {
             const option = document.createElement('option');
-            option.value = data[branch].indexOf(school); // نستخدم الاندكس الأصلي للوصول للبيانات
+            option.value = data[branch].indexOf(school); 
             option.textContent = school.name;
             schoolSelect.appendChild(option);
         });
@@ -306,18 +328,37 @@ function showSchoolData() {
         
         const rateNum = parseInt(rate);
         let rateClass = "";
+        
         if (rateNum === 100) rateClass = "rate-100";
-        if (rateNum < 90) rateClass = "rate-low";
+        else if (rateNum < 90) rateClass = "rate-low";
+        
+        // حساب الصفحات المتبقية بناءً على النسبة وإجمالي الصفحات
+        const totalPagesForSubject = pageTotals[branch] && pageTotals[branch][subject] ? pageTotals[branch][subject] : 0;
+        let pagesHtml = "";
+        
+        if (totalPagesForSubject > 0) {
+            const remainingPages = rateNum === 100 ? 0 : Math.round(totalPagesForSubject * ((100 - rateNum) / 100));
+            if (remainingPages === 0) {
+                pagesHtml = `<span class="pages-info pages-done-badge">✓ تم الختم بالكامل</span>`;
+            } else {
+                pagesHtml = `<span class="pages-info pages-remaining">المتبقي: ${remainingPages} صفحة تقريباً</span>`;
+            }
+        } else {
+            // في حال عدم توفر بيانات الصفحات للمادة
+            pagesHtml = rateNum === 100 ? `<span class="pages-info pages-done-badge">✓ تم الختم</span>` : `<span class="pages-info" style="color:gray;">قيد الإنجاز</span>`;
+        }
         
         item.innerHTML = `
-            <span class="subject-name">${subject}</span>
+            <div class="subject-info">
+                <span class="subject-name">${subject}</span>
+                ${pagesHtml}
+            </div>
             <span class="achievement-rate ${rateClass}">${rate}</span>
         `;
         grid.appendChild(item);
     }
 
     container.style.display = 'block';
-    // تمرير الشاشة للأسفل لرؤية النتيجة
     container.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 </script>
